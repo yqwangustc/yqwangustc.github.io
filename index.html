@@ -1,220 +1,104 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Resume</title>
-<link type="text/css" rel="stylesheet" href="css/blue.css" />
-<link type="text/css" rel="stylesheet" href="css/print.css" media="print"/>
-<!--[if IE 7]>
-<link href="css/ie7.css" rel="stylesheet" type="text/css" />
-<![endif]-->
-<!--[if IE 6]>
-<link href="css/ie6.css" rel="stylesheet" type="text/css" />
-<![endif]-->
-<script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>
-<script type="text/javascript" src="js/jquery.tipsy.js"></script>
-<script type="text/javascript" src="js/cufon.yui.js"></script>
-<script type="text/javascript" src="js/scrollTo.js"></script>
-<script type="text/javascript" src="js/myriad.js"></script>
-<script type="text/javascript" src="js/jquery.colorbox.js"></script>
-<script type="text/javascript" src="js/custom.js"></script>
-<script type="text/javascript">
-		Cufon.replace('h1,h2');
-</script>
-</head>
-<body>
-<!-- Begin Wrapper -->
-<div id="wrapper">
-  <div class="wrapper-top"></div>
-  <div class="wrapper-mid">
-    <!-- Begin Paper -->
-    <div id="paper">
-      <div class="paper-top"></div>
-      <div id="paper-mid">
-        <div class="entry">
-          <!-- Begin Image -->
-          <img class="portrait" src="images/me.jpg" alt="Yongqiang Wang" />
-          <!-- End Image -->
-          <!-- Begin Personal Information -->
-          <div class="self">
-            <h1 class="name">Yongqiang Wang <br /></h1>
-            <ul>
-              <li class="ad">12833 NE 101st Pl, Kirkland, WA, USA</li>
-              <li class="mail">yongqiang.wang at cantab.net</li>
-              <li class="tel">425.435.0511</li>
-              <li class="web">yqwangustc.github.io</li>
-            </ul>
-          </div>
-          <!-- End Personal Information -->
-          <!-- Begin Social -->
-          <div class="social">
-            <ul>
-              <li><a class='north' href="cv.pdf" title="Download cv.pdf"><img src="images/icn-save.jpg" alt="Download the pdf version" /></a></li>
-              <li><a class='north' href="javascript:window.print()" title="Print"><img src="images/icn-print.jpg" alt="" /></a></li>
-              <li><a class='north' id="contact" href="contact/index.html" title="Contact Me"><img src="images/icn-contact.jpg" alt="" /></a></li>
-              <!--
-              <li><a class='north' href="#" title="Github"><img src="images/GitHub-Mark.pnga" style="width:30px;height:30px"  alt="" /></a></li>
-              -->
-              <li><a class='north' href="http://www.facebook.com/yongqiang.wang" title="My Facebook Profile"><img src="images/icn-facebook.jpg" alt="" /></a></li>
-            </ul>
-          </div>
-          <!-- End Social -->
-        </div>
-        <!-- Begin 1st Row -->
-        <div class="entry">
-          <h2>INTRODUCTION</h2>
-          <p>A passionate machine learning practitioner with the focus on speech recognition and natural language processing; always curious of and ready for new things; eager to make impact for a better world.</p>
-        </div>
-        <!-- End 1st Row -->
-        <!-- Begin 2nd Row -->
-        <div class="entry">
-          <h2>EDUCATION</h2>
-          <div class="content">
-            <h3>Oct. 2009 - Jan. 2014</h3>
-            <p>Cambridge University (CU), Cambridge, England <br />
-              <em>PhD in information engineering</em></p>
-          </div>
-          <div class="content">
-            <h3> Sept. 2006 - Aug. 2009</h3>
-            <p>The University of Hong Kong (HKU), Hong Kong, China <br />
-              <em>Master in Computer Science</em></p>
-          </div>
-					<div class="content">
-            <h3> Sept. 2002 - Jun. 2006</h3>
-            <p>University of Science and Technology of China (USTC), Hefei, China <br />
-              <em>Bachelor in electronic engineering</em></p>
-          </div>
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-        </div>
-        <!-- End 2nd Row -->
-        <!-- Begin 3rd Row -->
-        <div class="entry">
-          <h2>EXPERIENCE</h2>
-          <div class="content">
-            <h3>Feb. 2014 - Sept. 2016</h3>
-            <p>Microsoft, Bellevue, WA, USA <br />
-              <em>Speech Scientist - Lead the acoustic model development for Microsoft speech services</em></p>
-            <ul class="info">
-              <li><i>Deep Learning-based Acoustic Models on Devices. </i> <br />This project delivered DL-based acoustic models on
-          battery-powered low-computational resource devices.</li>
-              <li><i>Deploying LSTM-based Acoustic Models into Microsoft Speech Service.</i> <br/>
-								This project established an high-throughput LSTM-based
-      					acoustic model training pipeline and an efficient
-          			runtime decoder. The final in-service model outperforms
-          the best DNN-based acoustic models by more than 10% in WER with less than
-          0.2xRT computational cost.</li>
-						  <li>
-								<i>Large Scale Distributed Training of Deep Learning Machines. </i><br/>
-								Distributed training of DNNs/RNNs/CNNs using 64 GPUs to achieve
-                  ~56x speed-up without modelling accuracy degradation;
-                  world record on DNN training speed; training LSTM-based
-                  acoustic model on more than 15K speech hours' data in less
-                  than 3 days.
-							</li>
-            </ul>
-          </div>
-          <div class="content">
-            <h3>Sept. 2007 - Oct. 2009</h3>
-            <p>Microsoft Research Asia, Beijing, China <br />
-              <em>Intern at speech team</em></p>
-            <ul class="info">
-              <li><i>Compact Handwriting Recognizer.</i><br/>
-							This project developed small-footprint yet high-performance
-			handwriting recognizer for East Asian languages such as Chinese,
-			Japanese and Korean.</li>
-							<li><i>Large Margin Discriminative Training of Handwriting
-        Recognizer.</i><br/>
-				This project aimed to improve the robustness of handwriting
-	recognition systems.
-							</li>
+    <title>Jon Barron</title>
 
-		            </ul>
-          </div>
-        </div>
-        <!-- End 3rd Row -->
+    <meta name="author" content="Yongqiang Wang">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-         <!-- Begin 5th Row -->
-        <div class="entry">
-        	<h2>PUBLICATIONS</h2>
-					<div class="content">
-						<h3>Recent Publication</h3>
-							<ul class="info">
-							<li>
-								X.&nbsp;Chen, X.&nbsp;Liu, Y.-Q. Wang, M.&nbsp;J.&nbsp;F. Gales, and P.&nbsp;C. Woodland.
-								 Efficient training and evaluation of recurrent neural network
-								  language models for automatic speech recognition.
-								 <i>IEEE Transactions on Audio, Speech and Language Processing
-								  (ASLP)</i>, August 2016.
-									[&nbsp;<a href="bib/mypubs_bib.html#chen2016">bib</a>&nbsp;]
-							</li>
-							<li>
-								X.&nbsp;Liu, X.&nbsp;Chen, Y.-Q. Wang, M.&nbsp;J.&nbsp;F. Gales, and P.&nbsp;C. Woodland.
-								 Two efficient lattice rescoring methods using recurrent neural
-								  network language models.
-								 <it>IEEE Transactions on Audio, Speech and Language Processing
-								  (ASLP)</it>, 24(8):1438--1449, August 2016.
-								[&nbsp;<a href="bib/mypubs_bib.html#liu2016two">bib</a>&nbsp;]
-							</li>
-							<li>
-								Y.-J. Miao, J.&nbsp;Li, Y.-Q. Wang, S.&nbsp;Zhang, and Y.&nbsp;Gong.
-								 Simplifying long short-term memory acoustic models for fast training
-								  and decoding.
-								 In <it>Proc. International Conference on Acoustic, Speech, and
-								  Signal Processing (ICASSP)</it>, 2016.
-								[&nbsp;<a href="bib/mypubs_bib.html#miao2016">bib</a>&nbsp;]
-							</li>
-							<li>
-								Y.&nbsp;Huang, Y.-Q. Wang, and Y.&nbsp;Gong.
-								 Semi-supervised training in deep learning acoustic models.
-								 In <i>Proc. Annual Conference of the International Speech
-								  Communication (Interspeech)</i>, 2016.
-								[&nbsp;<a href="bib/mypubs_bib.html#Huang2016semi">bib</a>&nbsp;]
-							</li>
-							<li>
-								C.&nbsp;Liu, Y.-Q. Wang, K.&nbsp;Kumar, and Y.&nbsp;Gong.
-								 Investigations on speaker adaptation of lstm rnn models for speech
-								  recognition.
-								 In <i>Proc. International Conference on Acoustic, Speech, and
-								  Signal Processing (ICASSP)</i>, 2016.
-								[&nbsp;<a href="bib/mypubs_bib.html#liu2016invest">bib</a>&nbsp;]
-							</li>
-							<li>
-								Y.-Q. Wang, J.&nbsp;Li, and Y.&nbsp;Gong.
-								 Small-footprint high-performance deep Neural network-based speech
-								  recognition using split-VQ.
-								 In <i>Proc. International Conference on Acoustic, Speech, and
-								  Signal Processing (ICASSP)</i>, 2015.
-								[&nbsp;<a href="bib/mypubs_bib.html#wang2015small">bib</a>&nbsp;]
-							</li>
-						</ul>
-					</div>
-					<div class="content">
-						<h3></h3>
-						<p>
-							<a href="bib/mypubs.html"><i>Full list of publications &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							</i> </a>
-							<a href="https://scholar.google.com/citations?user=OkngbkkAAAAJ&hl=en"><i>Google scholar</i> </a>
-						</p>
-					</div>
-        </div>
-        <!-- Begin 5th Row -->
-      </div>
-      <div class="clear"></div>
-      <div class="paper-bottom"></div>
-    </div>
-    <!-- End Paper -->
-  </div>
-  <div class="wrapper-bottom"></div>
-</div>
-<div id="message"><a href="#top" id="top-link">Go to Top</a></div>
-<center>
-  <a href="http://www.visitormap.org/" target="_top"><img src="http://www.visitormap.org/map/m:gdogaufpbtxcpzbb/s:1/c:ffffff/p:dot/y:3.png" alt="Free Visitor Maps at VisitorMap.org" border="0"></a><br><a href="http://www.visitormap.org/">Get a FREE visitor map for your site!</a></center>
-<!-- End Wrapper -->
-<!-- Start of StatCounter Code for Default Guide -->
-<a title="web analytics" href="http://statcounter.com/"
-                         target="_blank"><img
-                         src="//c.statcounter.com/11223981/0/f7262bb0/1/" alt="web
-                         analytics" style="border:none;"></a>
-<!-- end of StatCounter -->
-</body>
+    <link rel="stylesheet" type="text/css" href="stylesheet.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌐</text></svg>">
+  </head>
+
+  <body>
+    <table style="width:100%;max-width:800px;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
+      <tr style="padding:0px">
+        <td style="padding:0px">
+          <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
+            <tr style="padding:0px">
+              <td style="padding:2.5%;width:63%;vertical-align:middle">
+                <p class="name" style="text-align: center;">
+                  Yongqiang Wang
+                </p>
+                <p>I am a staff research scientist at Google.
+                </p>
+                <p>
+                  At Google I've worked on 
+                  <a href="https://cloud.google.com/speech-to-text"> Speech-to-text for Cloud</a>,
+                  <a href="https://sites.research.google/usm/"> Universal Speech Model</a>, and multimodal foundational models, for example
+                  <a href="https://google-research.github.io/seanet/audiopalm/examples/"> AudioPaLM</a>.
+                </p>
+                <p style="text-align:center">
+                  <a href="mailto:yongqiang.wang@outlook.com">Email</a> &nbsp;/&nbsp;
+                  <a href="data/CV_June_2023.pdf">CV</a> &nbsp;/&nbsp;
+                  <a href="https://scholar.google.com/citations?hl=en&user=OkngbkkAAAAJ">Google Scholar</a> &nbsp;/&nbsp;
+                  <a href="https://github.com/yqwangustc">Github</a>
+                </p>
+              </td>
+              <td style="padding:2.5%;width:40%;max-width:40%">
+                <a href="images/yqw.png"><img style="width:60%;max-width:100%" alt="profile photo" src="images/yqw.png" class="hoverZoomLink"></a>
+              </td>
+            </tr>
+          </tbody></table>
+          <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
+              <tr>
+              <td style="padding:20px;width:100%;vertical-align:middle">
+                <h2>Research</h2>
+                <p>
+                  I'm interested in speech recognition and integrating speech understanding capabilities into multimodal foundational models. 
+                  Some of the latest works are listed in the following.
+                </p>
+              </td>
+            </tr>
+          </tbody></table>
+          <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
+          
+        <tr>
+          <td style="padding:20px;width:25%;vertical-align:middle">
+            <img src="images/enc_out.png" alt="b3do" width="160" style="border-style: none">
+          </td>
+          <td width="75%" valign="middle">
+            <a href="https://arxiv.org/abs/2210.16481">
+              <span class="papertitle">Accelerating RNN-T Training and Inference Using CTC guidance</span>
+            </a>
+            <br>
+            <b>Yongqiang Wang</b>,
+            <a href="https://chenzhehuai.github.io/">Zhehuai Chen</a>,
+            Chengjian Zheng,
+            <a href="https://scholar.google.com/citations?user=EilVnKwAAAAJ&hl=en">Yu Zhang</a>,
+            <a href="https://scholar.google.com/citations?user=RNdGVHoAAAAJ&hl=en">Wei Han</a>,
+             Parisa Haghani
+            <br>
+            <em>ICASSP</em>, 2023
+            <br>
+            <p>We leverage the sparsity (both time and probability axes) of the CTC log posterior to accelerate the RNN-T training and inference.</p>
+          </td>
+        </tr>
+          </tbody></table>
+          <table width="100%" align="center" border="0" cellspacing="0" cellpadding="20"><tbody>
+            <tr>
+              <td>
+                <h2>Miscellanea</h2>
+              </td>
+            </tr>
+          </tbody></table>
+          <table width="100%" align="center" border="0" cellpadding="20"><tbody>
+           
+          </tbody></table>
+          <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
+            <tr>
+              <td style="padding:0px">
+                <br>
+                <p style="text-align:right;font-size:small;">
+                  Feel free to steal this website's <a href="https://github.com/jonbarron/jonbarron_website">source code</a>. <strong>Do not</strong> scrape the HTML from this page itself, as it includes analytics tags that you do not want on your own website &mdash; use the github code instead. Also, consider using <a href="https://leonidk.com/">Leonid Keselman</a>'s <a href="https://github.com/leonidk/new_website">Jekyll fork</a> of this page.
+                </p>
+              </td>
+            </tr>
+          </tbody></table>
+        </td>
+      </tr>
+    </table>
+  </body>
 </html>

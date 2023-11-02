@@ -27,9 +27,8 @@
 
   - CLIP is an example of using dual encoder with contrastive loss
 
-  ![clip](./clip.png)
-
+  <img src="./clip.png" alt="drawing" width="300"/>
 
 ## Approaches
 
-![coca](./coca.png)
+  <img src="./coca.png" alt="drawing" width="300"/>

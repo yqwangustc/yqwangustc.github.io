@@ -6,5 +6,9 @@ relative_links:
 include:
   - README.md
   - PaperReading/VLM/coca.md
+  - PaperReading/Diffusion/diffusion.md
 
 theme: jekyll-theme-tactile
+markdown: kramdown
+kramdown:
+    math_engine: katex

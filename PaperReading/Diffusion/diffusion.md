@@ -3,7 +3,9 @@
 ## Varational Autoencoder (VAE)
 In the normal auto-encoder (AE) model, for a data distribution $p(\boldsymbol{x})$, we first encode $\boldsymbol x$ using $q(\boldsymbol z|\boldsymbol x)$ and decode it using $p(\boldsymbol x|\boldsymbol z)$. We need to optimize the loglikelihood of $\boldsymbol x$ for a given encoding function $q(\boldsymbol z | \boldsymbol x)$. This gives the following loss function:
 
-$$\mathcal{L}_{\mathtt ae}(x) = \mathbf{E}_{q(\boldsymbol{z} | \boldsymbol{x})} [ p(\boldsymbol{x} | \boldsymbol{z})] + P_{\alpha} $$
+$$
+\mathcal{L}_{\mathtt ae}(x) = \mathbf{E}_{q(\boldsymbol{z} | \boldsymbol{x})} [ p(\boldsymbol{x} | \boldsymbol{z})] + P_{\alpha} 
+$$
 
 where $P_{\alpha}$ is regularization term. However it is unclear how to devise such reguarlaization term in principle. 
 
@@ -36,20 +38,21 @@ where $\boldsymbol\varepsilon_t$ draws from zero-mean unit-variance Gaussion dis
 
 - **Fast Forward Process**: A nice property of DDPM is that the conditional distribution of $\boldsymbol x_{t}$ given $\boldsymbol x_{0}$ can be calculated explicitly without going through the recrusive process, i.e., 
 
-  $$ 
+  $$
   \begin{align}
     \boldsymbol{x}_t &= \alpha_t \boldsymbol{x}_{t-1} + \beta \boldsymbol{\varepsilon_t} \nonumber\\ 
     & = \alpha_t \alpha_{t-1}...\alpha_1 \boldsymbol{x}_0 + (\alpha_t ... \alpha_2)\beta_1 \boldsymbol \varepsilon_1 + ... + \beta_t \boldsymbol\varepsilon_t
-  \end{align}  
+  \end{align}
   $$
 
-  Except for the first term in Eq. (6), each term is a zero-mean, unit-variance Gaussion noise, therefore, Eq (6) can be also written as: 
+  Except for the first term in Eq. (6), each term is a zero-mean, unit-variance Gaussion noise, therefore, Eq (6) can be also written as:
 
   $$
   \begin{align}
     \boldsymbol{x}_t = \overline{\alpha}_t \boldsymbol x_0 + \overline{\beta}_t \overline{\boldsymbol{\varepsilon}_t}
   \end{align}
   $$
+
   where $\overline{\alpha}_t = \prod_{\tau=1}^{t}\alpha_\tau$, $\overline{\beta}_t = \sqrt{1- \overline\alpha_t^2}$ and $\overline{\boldsymbol\varepsilon}_t$ is again a zero-mean, uni-variance Gaussin.
  
 - **Reverse Process**: However, we don't know the conditional distribution of $\boldsymbol{x}_{t-1}$ given $\boldsymbol x_{t}$. We only know that for small enough $\beta_t$, it is a still a Gaussian distribution. We use neural network (with parameter $\theta$) to estimate the mean and variance, given $\boldsymbol x_t$ and $t$, i.e., 

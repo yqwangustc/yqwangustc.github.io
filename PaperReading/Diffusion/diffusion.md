@@ -125,12 +125,72 @@ where $\boldsymbol\varepsilon_t$ draws from zero-mean unit-variance Gaussion dis
     $$
 
 ### Variational EM to optimize $\theta$
-With the above properties, we can now derive the variational EM algorithm to maximize data distribution $p_\theta(\boldsymbol x_0)$ with respect to $\theta$. Since only $\boldsymbol{ x}_0$ is observed, and $\boldsymbol{x}_1, ... \boldsymbol{x}_T$ are latent, they can be treated as the latent variable $\boldsymbol z$  in Eq. (5). Using $q=p(\boldsymbol x_1, ... \boldsymbol x_T| \boldsymbol x_0)$ and follow Eq. (3z``), we can have the following: 
+With the above properties, we can now derive the variational EM algorithm to maximize data distribution $p_\theta(\boldsymbol x_0)$ with respect to $\theta$. Since only $\boldsymbol{ x}_0$ is observed, and $\boldsymbol{x}_1, ... \boldsymbol{x}_T$ are latent, they can be treated as the latent variable $\boldsymbol z$  in Eq. (5). Using $q=p(\boldsymbol x_1, ... \boldsymbol x_T| \boldsymbol x_0)$ and follow Eq. (3), we can have the following:
 
 $$
 \begin{align}
-    \log p_{\theta}(\boldsymbol{x}_0) & \geq  \mathbf{E}_q [\log\frac{p(\boldsymbol{x}_0, \cdots, \boldsymbol{x}_T)}{p(\boldsymbol{x}_1, \cdots, \boldsymbol{x}_T| \boldsymbol{x}_0)}]
+    \log p_{\theta}(\boldsymbol{x}_0) & \geq  \mathbf{E}_q [\log\frac{p(\boldsymbol{x}_0, \cdots, \boldsymbol{x}_T)}{q(\boldsymbol{x}_1, \cdots, \boldsymbol{x}_T| \boldsymbol{x}_0)}]
 \end{align}
 $$
 
-At the same time, 
+At the same time, we can use chain rule of probability to factorize $p(\boldsymbol x_0, \cdots, \boldsymbol x_T)$ in the following form: 
+
+$$
+\begin{align}
+p(\boldsymbol{x}_{0:T}) &= p(\boldsymbol{x}_T) p(\boldsymbol{x}_{0:T-1}| \boldsymbol{x}_T) \\
+    &= p(\boldsymbol{x}_T) p(\boldsymbol{x}_{T-1} | \boldsymbol{x}_{T}) p(\boldsymbol{x}_{0:T-2} | \boldsymbol{x}_T, \boldsymbol{x}_{T-1}) \\
+    &= p(\boldsymbol{x}_T) p(\boldsymbol{x}_{T-1} | \boldsymbol{x}_{T}) p(\boldsymbol{x}_{0:T-2} | \boldsymbol{x}_{T-1}) \\
+    &= p(\boldsymbol x_T)\prod_{t=1}^{T} p(\boldsymbol{x}_{t-1} | \boldsymbol{x}_{t})
+\end{align}
+$$
+
+Note that Eq (10) is possible because given $\boldsymbol x_{T-1}$, $\boldsymbol x_{0:T-2}$ is indepdent of $\boldsymbol x_{T}$. 
+
+Similarly, we have:
+
+$$
+\begin{align}
+    q(\boldsymbol{x}_{1:T} | \boldsymbol{x}_0) = \prod_{t=1}^{T}p(\boldsymbol x_t | \boldsymbol{x}_{t-1})
+\end{align}
+$$
+we also note that for $t>1$, $q(\boldsymbol x_t | \boldsymbol x_{t-1}) = q(\boldsymbol x_t | \boldsymbol x_{t-1}, \boldsymbol x_0)$ because $\boldsymbol x_t$ is conditional independent of $\boldsymbol x_0$ given $\boldsymbol x_{t-1}$. We can further reforulate $q(\boldsymbol x_t | \boldsymbol x_{t-1}),\quad \forall t>1$ by
+
+$$
+\begin{align}
+    q(\boldsymbol x_t | \boldsymbol x_{t-1}) = q(\boldsymbol x_t | \boldsymbol x_{t-1}, \boldsymbol{x}_0) = \frac{q(\boldsymbol x_t, \boldsymbol x_{t-1}| \boldsymbol{x}_0)}{q(\boldsymbol{x}_{t-1}| \boldsymbol{x}_0)} = \frac{q(\boldsymbol x_{t-1} | \boldsymbol x_t, \boldsymbol{x}_0) q(\boldsymbol x_t | \boldsymbol{x}_0)}{q(\boldsymbol{x}_{t-1}| \boldsymbol{x}_0)}
+\end{align}
+$$
+
+Cominging Eq. (12 - 14), we have: 
+
+$$
+\begin{align}
+\log\frac{p(\boldsymbol{x}_0, \cdots, \boldsymbol{x}_T)}{q(\boldsymbol{x}_1, \cdots, \boldsymbol{x}_T| \boldsymbol{x}_0)} &= \log p(\boldsymbol{x}_T) + \sum_{t=1}^{T} \log p_{\theta}(\boldsymbol{x}_{t-1} | \boldsymbol{x}_t) \nonumber\\
+    &\quad - \log p(\boldsymbol{x}_1 | \boldsymbol{x}_0) - \sum_{t=2}^{T} \left( \log q(\boldsymbol{x}_{t-1} | \boldsymbol{x}_t , \boldsymbol{x}_0) + \log q(\boldsymbol{x}_t | \boldsymbol{x}_0) - \log q(\boldsymbol{x}_{t-1} | \boldsymbol{x}_0) \right) \nonumber \\
+ & =  \log p(\boldsymbol{x}_T) + \sum_{t=1}^{T} \log p_{\theta}(\boldsymbol{x}_{t-1} | \boldsymbol{x}_t) - \log q(\boldsymbol{x}_T | \boldsymbol{x}_0) - \sum_{t=2}^{T}\log q(\boldsymbol{x}_{t-1} | \boldsymbol{x}_t, \boldsymbol{x}_0) \nonumber \\
+  & = \log \frac{p(\boldsymbol{x}_T)}{q(\boldsymbol{x}_T | \boldsymbol{x}_0)} + \log p_{\theta}(\boldsymbol{x}_0 | \boldsymbol{x}_1) - \sum_{t=2}^{T}\log \frac{p_{\theta}(\boldsymbol{x}_{t-1}| \boldsymbol{x}_t)}{q(\boldsymbol{x}_{t-1} | \boldsymbol{x}_t, \boldsymbol{x}_0)}
+\end{align}
+$$
+
+Therefore,
+
+$$
+\begin{align}
+\log p_{\theta}(\boldsymbol{x}_0) & \geq  \mathbf{E}_q [\log\frac{p(\boldsymbol{x}_0, \cdots, \boldsymbol{x}_T)}{q(\boldsymbol{x}_1, \cdots, \boldsymbol{x}_T| \boldsymbol{x}_0)}] \nonumber\\
+        & = -\mathcal{D}(q(\boldsymbol{x}_T | \boldsymbol{x}_0) || p(\boldsymbol{x}_T)) - \sum_{t=2}^{T} \mathcal{D}(q(\boldsymbol{x}_{t-1} | \boldsymbol{x}_t, \boldsymbol{x}_0) || p(\boldsymbol{x}_{t-1}|| \boldsymbol{x}_t)) - \mathrm{E}_q\left[\log p_{\theta}(\boldsymbol{x}_0 | \boldsymbol{x}_1) \right]
+\end{align}
+$$
+where $\mathcal{D}(p||q)$ is the KL-diveragence between $p$ and $q$. Let's denote:
+  
+  - $L_0=\mathrm{E}_q[\log p_{\theta}(\boldsymbol{x}_0 | \boldsymbol{x}_1)]$
+  - $L_{t-1}=\mathcal{D}(q(\boldsymbol{x}_{t-1} | \boldsymbol{x}_t, \boldsymbol{x}_0) || p(\boldsymbol{x}_{t-1}|| \boldsymbol{x}_t)),\quad t=2,\cdots,{T}$
+  -  $L_T=\mathcal{D}(q(\boldsymbol{x}_T | \boldsymbol{x}_0) || p(\boldsymbol{x}_T))$
+
+It is also noted that $L_T$ is not a function of $\theta$. Then the loss function of $\theta$ becomes:
+
+$$
+\begin{align}
+\mathcal{L}(\theta) = \mathrm{E}_q[\log p_{\theta}(\boldsymbol{x}_0 | \boldsymbol{x}_1)] +
+\sum_{t=2}^{T}\mathcal{D}(q(\boldsymbol{x}_{t-1} | \boldsymbol{x}_t, \boldsymbol{x}_0) || p(\boldsymbol{x}_{t-1}|| \boldsymbol{x}_t))
+\end{align}
+$$

@@ -168,7 +168,7 @@ $$
 \log\frac{p(\boldsymbol{x}_0, \cdots, \boldsymbol{x}_T)}{q(\boldsymbol{x}_1, \cdots, \boldsymbol{x}_T| \boldsymbol{x}_0)} &= \log p(\boldsymbol{x}_T) + \sum_{t=1}^{T} \log p_{\theta}(\boldsymbol{x}_{t-1} | \boldsymbol{x}_t) \nonumber\\
     &\quad - \log p(\boldsymbol{x}_1 | \boldsymbol{x}_0) - \sum_{t=2}^{T} \left( \log q(\boldsymbol{x}_{t-1} | \boldsymbol{x}_t , \boldsymbol{x}_0) + \log q(\boldsymbol{x}_t | \boldsymbol{x}_0) - \log q(\boldsymbol{x}_{t-1} | \boldsymbol{x}_0) \right) \nonumber \\
  & =  \log p(\boldsymbol{x}_T) + \sum_{t=1}^{T} \log p_{\theta}(\boldsymbol{x}_{t-1} | \boldsymbol{x}_t) - \log q(\boldsymbol{x}_T | \boldsymbol{x}_0) - \sum_{t=2}^{T}\log q(\boldsymbol{x}_{t-1} | \boldsymbol{x}_t, \boldsymbol{x}_0) \nonumber \\
-  & = \log \frac{p(\boldsymbol{x}_T)}{q(\boldsymbol{x}_T | \boldsymbol{x}_0)} + \log p_{\theta}(\boldsymbol{x}_0 | \boldsymbol{x}_1) - \sum_{t=2}^{T}\log \frac{p_{\theta}(\boldsymbol{x}_{t-1}| \boldsymbol{x}_t)}{q(\boldsymbol{x}_{t-1} | \boldsymbol{x}_t, \boldsymbol{x}_0)}
+  & = \log \frac{p(\boldsymbol{x}_T)}{q(\boldsymbol{x}_T | \boldsymbol{x}_0)} + \log p_{\theta}(\boldsymbol{x}_0 | \boldsymbol{x}_1) + \sum_{t=2}^{T}\log \frac{p_{\theta}(\boldsymbol{x}_{t-1}| \boldsymbol{x}_t)}{q(\boldsymbol{x}_{t-1} | \boldsymbol{x}_t, \boldsymbol{x}_0)}
 \end{align}
 $$
 
@@ -177,12 +177,12 @@ Therefore,
 $$
 \begin{align}
 \log p_{\theta}(\boldsymbol{x}_0) & \geq  \mathbf{E}_q [\log\frac{p(\boldsymbol{x}_0, \cdots, \boldsymbol{x}_T)}{q(\boldsymbol{x}_1, \cdots, \boldsymbol{x}_T| \boldsymbol{x}_0)}] \nonumber\\
-        & = -\mathcal{D}(q(\boldsymbol{x}_T | \boldsymbol{x}_0) || p(\boldsymbol{x}_T)) - \sum_{t=2}^{T} \mathcal{D}(q(\boldsymbol{x}_{t-1} | \boldsymbol{x}_t, \boldsymbol{x}_0) || p(\boldsymbol{x}_{t-1}|| \boldsymbol{x}_t)) - \mathrm{E}_q\left[\log p_{\theta}(\boldsymbol{x}_0 | \boldsymbol{x}_1) \right]
+        & = -\mathcal{D}(q(\boldsymbol{x}_T | \boldsymbol{x}_0) || p(\boldsymbol{x}_T)) - \sum_{t=2}^{T} \mathcal{D}(q(\boldsymbol{x}_{t-1} | \boldsymbol{x}_t, \boldsymbol{x}_0) || p(\boldsymbol{x}_{t-1}|| \boldsymbol{x}_t)) + \mathrm{E}_q\left[\log p_{\theta}(\boldsymbol{x}_0 | \boldsymbol{x}_1) \right]
 \end{align}
 $$
 where $\mathcal{D}(p||q)$ is the KL-diveragence between $p$ and $q$. Let's denote:
   
-  - $L_0=\mathrm{E}_q[\log p_{\theta}(\boldsymbol{x}_0 | \boldsymbol{x}_1)]$
+  - $L_0=- \mathrm{E}_q[\log p_{\theta}(\boldsymbol{x}_0 | \boldsymbol{x}_1)]$
   - $L_{t-1}=\mathcal{D}(q(\boldsymbol{x}_{t-1} | \boldsymbol{x}_t, \boldsymbol{x}_0) || p(\boldsymbol{x}_{t-1}|| \boldsymbol{x}_t)),\quad t=2,\cdots,{T}$
   -  $L_T=\mathcal{D}(q(\boldsymbol{x}_T | \boldsymbol{x}_0) || p(\boldsymbol{x}_T))$
 
@@ -190,7 +190,37 @@ It is also noted that $L_T$ is not a function of $\theta$. Then the loss functio
 
 $$
 \begin{align}
-\mathcal{L}(\theta) = \mathrm{E}_q[\log p_{\theta}(\boldsymbol{x}_0 | \boldsymbol{x}_1)] +
-\sum_{t=2}^{T}\mathcal{D}(q(\boldsymbol{x}_{t-1} | \boldsymbol{x}_t, \boldsymbol{x}_0) || p(\boldsymbol{x}_{t-1}|| \boldsymbol{x}_t))
+\mathcal{L}(\theta) = L_0 +  \sum_{t=1}^{T-1} L_t 
 \end{align}
 $$
+
+Recall that: 
+
+  - $q(\boldsymbol x_{t-1} | \boldsymbol{x}_t, \boldsymbol{x}_0) = \mathcal{N}(\boldsymbol x_{t-1}; \frac{1}{\alpha_t}(\boldsymbol{x}_t - \frac{\beta_t^2}{\overline\beta_t}\boldsymbol{\overline\varepsilon}_t), \frac{\beta_t\overline\beta_{t-1}}{\overline\beta_t}\boldsymbol{I})$;
+
+  - $p(\boldsymbol x_{t-1}|| \boldsymbol{x}_t) = \mathcal{N}(\boldsymbol{x}_{t-1}; \boldsymbol \mu_{\theta}(\boldsymbol x_t, t), \boldsymbol\Sigma_{\theta}(\boldsymbol x_t, t))$. For simplicity of derivation, we can reparameterize $\boldsymbol \mu_{\theta}(\boldsymbol x_t, t)=\frac{1}{\alpha_t}(\boldsymbol x_t - \frac{\beta_t^2}{\overline\beta_t}\boldsymbol{\varepsilon}(\boldsymbol{x}_t, t))$. 
+
+  - The KL distance between two Gaussian distributions has a closed form, i.e.,
+
+    $$
+    \begin{align}
+    \mathrm{KL}(\mathcal{N}(\boldsymbol{x}; \boldsymbol{\mu}_1, \boldsymbol{\Sigma}_1) || \mathcal{N}(\boldsymbol{x}; \boldsymbol{\mu}_2, \boldsymbol{\Sigma}_2))
+    = \frac{1}{2}\left[
+        \log\frac{\det(\boldsymbol{\Sigma}_2)}{\det\boldsymbol{\Sigma}_1} + \mathrm{tr}(\boldsymbol{\Sigma_2}^{-1}\boldsymbol{\Sigma_1})
+        + (\boldsymbol{\mu}_2 - \boldsymbol{\mu}_1)^{\mathrm T}\boldsymbol{\Sigma}_2^{-1}(\boldsymbol{\mu}_2 - \boldsymbol{\mu}_1)
+    \right]
+    \end{align}
+    $$
+
+Therefore, we have
+
+$$
+\begin{align}
+    L_t(\theta) &= \frac{\beta_t^4}{2\alpha_t^2 \overline\beta_t^2 \det(\boldsymbol{\Sigma}_{\theta})} \cdot \mathbf{E}_{\boldsymbol{x}_0, \boldsymbol{\varepsilon_t}}
+     (\boldsymbol{\overline\varepsilon}_t - \boldsymbol{\varepsilon}_{\theta}(\boldsymbol{x}_t, t))^2 \\
+     &= \frac{\beta_t^4}{2\alpha_t^2 \overline\beta_t^2 \det(\boldsymbol{\Sigma}_{\theta})} \cdot \mathbf{E}_{\boldsymbol{x}_0, \boldsymbol{\varepsilon_t}}
+     (\boldsymbol{\overline\varepsilon}_t - \boldsymbol{\varepsilon}_{\theta}(\overline{\alpha_t}\boldsymbol x_0 + \overline{\beta_t} \boldsymbol{\overline\varepsilon}_t, t))^2
+\end{align}
+$$
+
+Note the above expectation is taken over $\boldsymbol x_0$ which is drawn from the data distribution and $\boldsymbol{\overline\varepsilon_t}$ which is a zero-mean, unit-variance Gaussian distribution.

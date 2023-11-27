@@ -223,4 +223,16 @@ $$
 \end{align}
 $$
 
-Note the above expectation is taken over $\boldsymbol x_0$ which is drawn from the data distribution and $\boldsymbol{\overline\varepsilon_t}$ which is a zero-mean, unit-variance Gaussian distribution.
+Note the above expectation is taken over $\boldsymbol x_0$ which is drawn from the data distribution and $\boldsymbol{\overline\varepsilon_t}$ which is a zero-mean, unit-variance Gaussian distribution. Emprically, it is found that training the following simplified loss function yield better results: 
+
+$$
+\begin{align}
+  \mathcal{L}_{\rm simple} = \mathbf{E}_{t, \boldsymbol{x}_0, \boldsymbol{\overline\varepsilon}_t}(\boldsymbol{\overline\varepsilon}_t - \boldsymbol{\varepsilon}_{\theta}(\overline{\alpha_t}\boldsymbol x_0 + \overline{\beta_t} \boldsymbol{\overline\varepsilon}_t, t))^2
+\end{align}
+$$
+
+Based on this, the following training and inference algorithm can be derived:
+
+ <img src="./dm_alg.png" alt="drawing" width="800"/>
+
+

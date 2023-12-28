@@ -1,4 +1,13 @@
+<!-- title: Diffusion Model -->
 # From VAE to Diffusion Model
+- [From VAE to Diffusion Model](#from-vae-to-diffusion-model)
+  - [Varational Autoencoder (VAE)](#varational-autoencoder-vae)
+  - [Denoise Diffusion Probablistic Model (DDPM)](#denoise-diffusion-probablistic-model-ddpm)
+    - [Forward (diffusion) and Backward (denoise) process](#forward-diffusion-and-backward-denoise-process)
+    - [Variational EM to optimize $\theta$](#variational-em-to-optimize-theta)
+    - [Interpretation of the Training and Sampling Process](#interpretation-of-the-training-and-sampling-process)
+      - [Denoising perspective](#denoising-perspective)
+
 
 ## Varational Autoencoder (VAE)
 In the normal auto-encoder (AE) model, for a data distribution $p(\boldsymbol{x})$, we first encode $\boldsymbol x$ using $q(\boldsymbol z|\boldsymbol x)$ and decode it using $p(\boldsymbol x|\boldsymbol z)$. We need to optimize the loglikelihood of $\boldsymbol x$ for a given encoding function $q(\boldsymbol z | \boldsymbol x)$. This gives the following loss function:
@@ -26,6 +35,7 @@ The first term in the above equation is the log-likelihood of decoder output, wh
 
 ## Denoise Diffusion Probablistic Model (DDPM)
 
+### Forward (diffusion) and Backward (denoise) process
 In the DDPM, we start from $\boldsymbol x_0$, whose distribution is unknown. At each step $t$, a diffusion process is used: 
 
 $$
@@ -72,16 +82,14 @@ where $\boldsymbol\varepsilon_t$ draws from zero-mean unit-variance Gaussion dis
     $$
     \begin{align*}
         p(\boldsymbol x_{t-1} | \boldsymbol{x}_t, \boldsymbol{x}_0) \sim 
-
         \exp(-\frac{1}{2\beta_t^2}(\boldsymbol{x}_t - \alpha_t \boldsymbol{x}_{t-1})^2)
         \cdot
         \exp(-\frac{1}{2\overline\beta_{t-1}^2}(\boldsymbol{x}_{t-1} - \overline\alpha_{t-1}\boldsymbol{x}_0)^2)\cdot
         \exp(\frac{1}{2\overline\beta_t^2}(\boldsymbol{x}_t - \overline\alpha_t \boldsymbol{x}_0)^2)
     \end{align*}
-    $$
+    $$.
 
     Note that the above equation can be written as:
-
     $$
     \begin{align*}
         p(\boldsymbol x_{t-1} | \boldsymbol{x}_t, \boldsymbol{x}_0) &\sim
@@ -97,7 +105,6 @@ where $\boldsymbol\varepsilon_t$ draws from zero-mean unit-variance Gaussion dis
           = \frac{\alpha_t^2(1-\overline\alpha_{t-1}^2) + \beta_t^2}{\beta_t^2 (1- \overline\alpha_{t-1}^2)} = \frac{1-\overline\alpha_t^2}{\beta_t^2 (1- \overline\alpha_{t-1}^2)} = \frac{\overline\beta_t^2}{\beta_t^2 \overline\beta_{t-1}^2} = (\frac{\overline\beta_t}{\beta_t \overline\beta_{t-1}})^2
         \\
         b &= \frac{\alpha_t}{\beta_t^2} \boldsymbol{x}_t + \frac{\overline\alpha_{t-1}}{\overline\beta_{t-1}^2} \boldsymbol{x}_0 \\
-
         \frac{b}{a} &= \frac{\alpha_t (1 - \overline\alpha_{t-1}^2)}{1- \overline\alpha_t^2} \boldsymbol x_t + \frac{\beta_t^2 \overline\alpha_{t-1}}{1- \overline\alpha_t^2} \boldsymbol{x}_0 \\
                     &= \frac{\alpha_t \overline\beta_{t-1}^2}{\overline\beta_t^2} \boldsymbol{x}_t  + \frac{\overline\alpha_{t-1}\beta_t^2}{\overline\beta_t^2}\boldsymbol{x}_0
     \end{align*}
@@ -235,4 +242,85 @@ Based on this, the following training and inference algorithm can be derived:
 
  <img src="./dm_alg.png" alt="drawing" width="800"/>
 
+### Interpretation of the Training and Sampling Process
 
+In the previous section, we derive the training and sampling process in a mathematical rigorous way. On the other hand, it may not be easy to understand the algorithms. Here we provide a few approches to interpret how the training and sampling algorithm is derived in an intuitive manner.
+
+#### Denoising perspective
+
+The first method approaches to the problem from the denoising perspective. By the definition of reverse process, $\boldsymbol \mu_{\theta}(\boldsymbol{x}_t, t)$ is to recover the mean of $\boldsymbol x_{t-1}$, thefore a reasonable loss function to optimize is thus: 
+
+$$
+\begin{align}
+  \mathcal{L}_{\rm denoise} = \mathbf{E}_{t, \boldsymbol{x}_{t-1}, \boldsymbol{x}_t}\|\boldsymbol{x}_{t-1} - \boldsymbol{\mu}_{\theta}(\boldsymbol{x}_t, t) \|^2
+\end{align}
+$$
+
+Since we don't know the distribution of $\boldsymbol x_{t}$ or $\boldsymbol x_{t-1}$ and their joint distribution, we cannot determine the above loss function. Instead, we know that (from the forward process): 
+
+$$
+\begin{align}
+\boldsymbol x_{t-1} = \frac{1}{\alpha_t}(\boldsymbol x_t - \beta_t\boldsymbol \varepsilon_t)
+\end{align}
+$$
+
+Accordingly, we re-parameterize $\boldsymbol \mu_{\theta}(\boldsymbol x_t, t)$ as
+
+$$
+\begin{align}
+\boldsymbol \mu_{\theta}(\boldsymbol x_t, t) = \frac{1}{\alpha_t}(\boldsymbol x_t - \beta_t\boldsymbol \varepsilon_{\theta}(\boldsymbol x_t, t))
+\end{align}
+$$
+
+Then the loss function becomes
+
+$$
+\begin{align}
+  \mathcal{L}_{\rm denoise} = \mathbf{E}_{t, \boldsymbol{x}_t}\frac{\beta_t^2}{\alpha_t^2}\|\boldsymbol \varepsilon_t - \boldsymbol{\varepsilon}_{\theta}(\boldsymbol{x}_t, t) \|^2
+\end{align}
+$$
+
+To sample $\boldsymbol x_t$, recall that (by the fast-forward process), 
+
+$$
+\begin{align}
+\boldsymbol{x}_t &= 
+  \overline{\alpha}_t \boldsymbol{x}_0 + 
+  \overline{\beta}_t \overline{\boldsymbol\varepsilon}_t \\
+  &= \alpha_t(\overline{\alpha}_{t-1} \boldsymbol{x}_0 + 
+  \overline{\beta}_{t-1} \overline{\boldsymbol\varepsilon}_{t-1}) + \beta_t \boldsymbol{\varepsilon}_t
+\end{align}
+$$
+
+Plugging Eq. (27) into the loss function Eq. (22), (note that we cannot plug Eq. (26) into Eq. (22), because $\overline{\boldsymbol\varepsilon}_t$ is a function of $\boldsymbol \varepsilon_t$, so they cannot be sampled independently), we got
+
+$$
+\begin{align}
+  \mathcal{L}_{\rm denoise} = \mathbf{E}_{t, \boldsymbol{\varepsilon}_t, \overline{\boldsymbol{\varepsilon}}_{t-1}} \frac{\beta_t^2}{\alpha_t^2}\| \boldsymbol{\varepsilon}_t - \boldsymbol{\varepsilon}_{\theta}(\overline{\alpha}_{t} \boldsymbol{x}_0 + \alpha_t
+  \overline{\beta}_{t-1} \overline{\boldsymbol\varepsilon}_{t-1} + \beta_t \boldsymbol{\varepsilon}_t, t) \|^2
+\end{align}
+$$
+
+We further noting that:
+
+$$
+\begin{align}
+  \overline{\beta}_t\overline{\boldsymbol\varepsilon}_t &= \alpha_t
+  \overline{\beta}_{t-1} \overline{\boldsymbol\varepsilon}_{t-1} + \beta_t \boldsymbol{\varepsilon}_t \\
+\end{align}
+$$
+is independent of $\overline{\beta}_t \boldsymbol{w}=\beta_t \overline{\boldsymbol\varepsilon}_{t-1} -  \alpha_t\overline{\beta}_{t-1}\boldsymbol{\varepsilon}_t$ and 
+$$
+\begin{align}
+  \boldsymbol{\varepsilon}_t = \frac{\beta_t \overline{\boldsymbol\varepsilon}_t - \alpha_t\overline{\beta}_{t-1}\boldsymbol{w}}{\overline{\beta}_t}
+\end{align}
+$$
+
+With the above changing of variable, the loss function can then be written as:
+
+$$
+\begin{align}
+  \mathcal{L}_{\rm denoise} = \mathbf{E}_{t, \overline{\boldsymbol{\varepsilon}}_t} \frac{\beta_t^2}{\alpha_t^2}\| \frac{\beta_t}{\overline{\beta}_t}\overline{\boldsymbol\varepsilon}_t - \boldsymbol{\varepsilon}_{\theta}(\overline{\alpha}_t\boldsymbol{x}_0 + \overline{\beta}_t \overline{\boldsymbol{\varepsilon_t}}, t)\|^2 + C
+\end{align}
+$$
+where $C$ is a constant (only related to $\boldsymbol w$). Also note that after the changing of variables, $\boldsymbol\varepsilon_{\theta}(\cdot, \cdot)$ in Eq (28) and (31) are different functions (one is trying to denoise one step noise $\boldsymbol{\varepsilon}_t$, and the other is trying to denoise cumulative noise $\overline{\boldsymbol{\varepsilon}}_t$)
